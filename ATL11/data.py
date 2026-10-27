@@ -70,7 +70,7 @@ class data(object):
             cycles=self.cycles
         if target is None:
             target=ATL11.data(N_pts=N_pts, cycles=cycles, N_coeffs=N_coeffs, track_num=self.track_num, beam_pair=self.beam_pair)
-        xover_ind=np.in1d(self.crossing_track_data.ref_pt, self.ROOT.ref_pt[ind])
+        xover_ind=np.isin(self.crossing_track_data.ref_pt, self.ROOT.ref_pt[ind]).ravel()
         for group in self.groups:
             setattr(target, group, getattr(self, group).index(ind, cycles=cycles, N_coeffs=N_coeffs, xover_ind=xover_ind))
         target.poly_exponent=self.poly_exponent.copy()

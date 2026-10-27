@@ -123,7 +123,7 @@ def get_xover_data(x0, y0, rgt, xover_cache, index_bin_size, params_11,
             temp=pc.data(fields=params_11.ATL06_xover_field_list).from_list(tile_data_list)
             xover_cache[this_key]={'D':temp}
             # remove the current rgt from data in the cache
-            temp.index(~np.in1d(xover_cache[this_key]['D'].rgt, [rgt]))
+            temp.index(~np.isin(xover_cache[this_key]['D'].rgt, [rgt]).ravel())
             if xover_cache[this_key]['D'].size==0:
                 continue
             temp.get_xy(EPSG=params_11.EPSG)
@@ -159,7 +159,7 @@ def subset_data_to_bins(D, xy_bin, bin_size=100, EPSG=None):
         return
     for Di in D:
         Di.get_xy(EPSG=EPSG)
-        Di.index(np.in1d(np.round((Di.x+1j*Di.y)/bin_size)*bin_size, xy_bin[:,0]+1j*xy_bin[:,1]))
+        Di.index(np.isin(np.round((Di.x+1j*Di.y)/bin_size)*bin_size, xy_bin[:,0]+1j*xy_bin[:,1]).ravel())
 
 def sort_data_bin(D, bin_W):
     """

@@ -90,7 +90,7 @@ def check_ATL06_data_against_hold_list(D, hold_list=None):
         c=D.cycle
     hold_arr=np.c_[hold_list]
     cr = np.round(c).astype(int)+1j*np.round(D.rgt).astype(int)
-    good = ~np.in1d(cr,  hold_arr[:,0]+1j*hold_arr[:,1])
+    good = ~np.isin(cr,  hold_arr[:,0]+1j*hold_arr[:,1]).ravel()
     if good.ndim==2:
         good=np.all(good, axis=2)
     if not np.all(good):

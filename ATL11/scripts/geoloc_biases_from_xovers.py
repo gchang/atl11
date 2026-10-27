@@ -279,7 +279,7 @@ def main():
         hold_arr=np.c_[hold_info]
         bad=np.zeros_like(v.rgt[:,0], dtype=bool)
         for col in [0, 1]:
-            bad |= np.in1d(v.cycle_number[:,col]+1j*v.rgt[:,col], hold_arr[:,0]+1j*hold_arr[:,1])
+            bad |= np.isin(v.cycle_number[:,col]+1j*v.rgt[:,col], hold_arr[:,0]+1j*hold_arr[:,1])
             good =~bad
         v.index(good)
     uT, t_bins = pc.unique_by_rows(np.round(np.mean(v.delta_time, axis=1)/ctr_t_tol)*ctr_t_tol, return_dict=True)

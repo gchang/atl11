@@ -262,7 +262,7 @@ class point(ATL11.data):
         except ValueError:
             print("Problem with histogram")
         y_unselected=[]
-        for cycle in np.unique(D6.cycle_number.ravel()[~np.in1d(D6.cycle_number.ravel(),cycle)]):
+        for cycle in np.unique(D6.cycle_number.ravel()[~np.isin(D6.cycle_number.ravel(),cycle)]):
             y_unselected.append(np.nanmedian(D6.y_atc[D6.cycle_number==cycle]))
         N_unsel_cycles = np.histogram(y_unselected, bins=y0_shifts)[0]
         count_kernel = np.ones(np.ceil(self.params_11.L_search_XT*2-self.params_11.beam_spacing).astype(int))
@@ -726,9 +726,9 @@ class point(ATL11.data):
             non_ref_cycle_fields +=  ['release_bias']
 
         # The cycles we are working on are the ones not in ref_surf_cycles
-        other_cycles=np.unique(D6.cycle_number.ravel()[~np.in1d(D6.cycle_number.ravel(),self.ref_surf_cycles)])
+        other_cycles=np.unique(D6.cycle_number.ravel()[~np.isin(D6.cycle_number.ravel(),self.ref_surf_cycles)])
         # 1. find cycles not in ref_surface_cycles, but have valid_segs.data and valid_segs.x_slope
-        non_ref_segments= np.in1d(D6.cycle_number.ravel(),other_cycles) & self.valid_segs.data.ravel() & self.valid_segs.x_slope.ravel()
+        non_ref_segments= np.isin(D6.cycle_number.ravel(),other_cycles) & self.valid_segs.data.ravel() & self.valid_segs.x_slope.ravel()
         #  If the x polynomial degree is zero, allow only segments that have x_atc matching that of the valid segments (+- 10 m)
         if (self.degree_list_x==0).all():
             ref_surf_x_ctrs=D6.x_atc[self.selected_segments]
@@ -790,9 +790,9 @@ class point(ATL11.data):
         non_segid=D6.segment_id.ravel()[non_ref_segments]
 
         for cc in range(1,D6.cycle_number.max().astype(int)+1):
-            if np.in1d(cc,self.ref_surf_cycles):
+            if np.isin(cc,self.ref_surf_cycles):
                 self.segment_id_by_cycle.append( np.array( segid[cyc==cc] ) )
-            elif np.in1d(cc,self.non_ref_surf_cycles):
+            elif np.isin(cc,self.non_ref_surf_cycles):
                 self.segment_id_by_cycle.append( np.array( non_segid[non_cyc==cc] ) )
             else:
                 self.segment_id_by_cycle.append(np.array([]))
@@ -848,7 +848,7 @@ class point(ATL11.data):
         z_xover_sigma = np.sqrt( np.diag( np.dot(np.dot(S_poly,self.C_m_surf),np.transpose(S_poly)) ) + Dsub.h_li_sigma.ravel()**2 ) # equation 11
         orb_pair=(Dsub.cycle_number-1)*1387+Dsub.rgt+Dsub.BP*0.1
         u_orb_pair=np.unique(orb_pair)
-        u_orb_pair=u_orb_pair[~np.in1d(u_orb_pair, self.ref_surf_cycles*1387+self.rgt+self.beam_pair*0.1)]
+        u_orb_pair=u_orb_pair[~np.isin(u_orb_pair, self.ref_surf_cycles*1387+self.rgt+self.beam_pair*0.1)]
         ref_surf_slope_mag=np.sqrt(self.ref_surf_slope_x**2+self.ref_surf_slope_y**2)
         for orb_pair_i in u_orb_pair:
             # select the smallest-error segment from each orbit  and pair
