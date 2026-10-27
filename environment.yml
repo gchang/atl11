@@ -6,5 +6,6 @@ dependencies:
   - pip
   - gdal
   - libnetcdf
+  - numpy<2.4  # 2.4 removed np.in1d and made size-1 array to scalar conversion an error (data.py:109)
   - pip:
     - -e .[dev,all]  # includes optional deps from pyproject.toml
