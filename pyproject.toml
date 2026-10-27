@@ -30,7 +30,7 @@ dependencies = [
     "shapely",
     "cartopy",
     "imageio",
-    "pointCollection @ git+ssh://git@github.com/smithb/pointCollection.git"
+    "pointCollection @ git+https://github.com/smithb/pointCollection.git@1c23042b91892522a3786b627767176f610f69a3"
 ]
 
 classifiers=[
